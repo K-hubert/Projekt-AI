@@ -139,9 +139,8 @@ if st.session_state.flashcards:
 
     st.divider()
 
-# --------------------------------------------------
 # Chat
-# --------------------------------------------------
+
 if not st.session_state.ready:
     st.info("Wrzuć PDF(y) w sidebarze i kliknij **Zbuduj indeks**.")
 else:
