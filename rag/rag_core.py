@@ -4,6 +4,9 @@ import numpy as np
 import faiss
 from dotenv import load_dotenv
 from openai import OpenAI
+import random
+import json
+
 
 from rag.pdf_loader import extract_pages_from_pdf_bytes
 from rag.chunking import Chunk, chunk_text
@@ -118,3 +121,58 @@ FORMAT:
         temperature=0.2,
     )
     return resp.choices[0].message.content
+
+def generate_flashcards(rag: RagIndex, n_cards: int = 20, llm_model: str = DEFAULT_LLM_MODEL):
+    # wybieramy próbkę chunków, żeby nie karmić LLM całym światem
+    if not rag.meta or rag.index is None:
+        raise RuntimeError("Index not ready.")
+
+    sample_size = min(max(n_cards * 3, 20), len(rag.meta))
+    sampled = random.sample(rag.meta, sample_size)
+
+    context_blocks = []
+    for m in sampled:
+        context_blocks.append(
+            f"[SOURCE: {m['source']} | PAGE: {m['page']} | CHUNK: {m['id']}]\n{m['text'].strip()}\n"
+        )
+    context = "\n---\n".join(context_blocks)
+
+    prompt = f"""Na podstawie kontekstu wygeneruj {n_cards} fiszek do nauki na egzamin.
+Fiszka = pytanie + krótka odpowiedź, wyłącznie z kontekstu.
+Unikaj pytań zbyt ogólnych. Preferuj definicje, porównania, kroki algorytmu, typowe pułapki, przykłady.
+
+Zwróć wynik jako poprawny JSON (bez dodatkowego tekstu), lista obiektów:
+[
+  {{
+    "question": "...",
+    "answer": "...",
+    "sources": ["plik | strona:X | chunk:Y", ...]
+  }},
+  ...
+]
+
+KONTEKST:
+{context}
+"""
+
+    resp = rag.client.chat.completions.create(
+        model=llm_model,
+        messages=[
+            {"role": "system", "content": "Jesteś asystentem RAG. Nie zmyślaj. JSON ma być poprawny."},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.3,
+    )
+
+    raw = resp.choices[0].message.content.strip()
+
+    # próba parsowania JSON; jeśli LLM coś dopisze, to proste czyszczenie
+    try:
+        return json.loads(raw)
+    except Exception:
+        # wyciągnij od pierwszego '[' do ostatniego ']'
+        start = raw.find('[')
+        end = raw.rfind(']')
+        if start != -1 and end != -1 and end > start:
+            return json.loads(raw[start:end+1])
+        raise
