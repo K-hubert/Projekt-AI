@@ -19,9 +19,8 @@ EMBED_MODEL = "text-embedding-3-small"
 DEFAULT_LLM_MODEL = "gpt-4o-mini"
 
 
-# =========================
 # Few-shot examples
-# =========================
+
 FEW_SHOT_QA = """
 PRZYKŁAD:
 KONTEKST:
@@ -119,7 +118,7 @@ class RagIndex:
         self.meta = meta_all
         self.vectors = vectors
 
-    # -------- Retrieval: similarity --------
+    # Retrieval: similarity 
     def retrieve(self, query: str, top_k: int = 4) -> List[Tuple[Dict[str, Any], float]]:
         if self.index is None or not self.meta:
             raise RuntimeError("Index not built.")
@@ -134,7 +133,7 @@ class RagIndex:
             out.append((self.meta[int(idx)], float(distances[0][rank])))
         return out
 
-    # -------- Retrieval: MMR --------
+    # Retrieval: MMR
     @staticmethod
     def _normalize(x: np.ndarray) -> np.ndarray:
         eps = 1e-8
