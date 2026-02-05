@@ -98,6 +98,7 @@ def answer(
     mmr_lambda: float = 0.6,
     fetch_k: int = 30,
     use_few_shot: bool = True,
+    profile: str = "concise",
 ) -> str:
 
     retriever = Retriever(rag)
@@ -119,7 +120,8 @@ def answer(
         retrieved=retrieved,
         cfg=PromptConfig(
             mode=mode,
-            use_few_shot=use_few_shot
+            use_few_shot=use_few_shot,
+            profile=profile
         )
     )
 

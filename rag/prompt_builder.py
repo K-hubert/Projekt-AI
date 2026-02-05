@@ -43,8 +43,9 @@ Pułapki / na co uważać:
 
 @dataclass
 class PromptConfig:
-    mode: str = "qa"          # "qa" albo "study"
+    mode: str = "qa"
     use_few_shot: bool = True
+    profile: str = "concise"   # concise / study / exam
 
 
 class PromptBuilder:
@@ -67,8 +68,19 @@ class PromptBuilder:
         few_shot_block = ""
         if cfg.use_few_shot:
             few_shot_block = FEW_SHOT_QA if cfg.mode == "qa" else FEW_SHOT_STUDY
+        profile_rules = ""
+
+        if cfg.profile == "concise":
+            profile_rules = "- Odpowiedź maksymalnie 3 zdania."
+
+        elif cfg.profile == "study":
+            profile_rules = "- Odpowiedź w formie notatki punktowej."
+
+        elif cfg.profile == "exam":
+            profile_rules = "- Odpowiedź pełnym formalnym stylem egzaminacyjnym."
 
         if cfg.mode == "qa":
+            
             return f"""Odpowiedz WYŁĄCZNIE na podstawie kontekstu. Jeśli brak odpowiedzi w kontekście, powiedz: "Nie mam informacji w PDF-ach."
 {few_shot_block}
 
@@ -80,6 +92,7 @@ PYTANIE:
 
 WYMAGANIA:
 - krótko i konkretnie po polsku
+{profile_rules}
 - na końcu "Źródła:" (plik + strona + chunk)
 """
         else:

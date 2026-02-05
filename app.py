@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from rag.rag_core import RagIndex, answer, generate_flashcards, compute_text_stats
 
@@ -127,6 +128,19 @@ with tab_chat:
     else:
         # 1) INPUT NA GÓRZE (zamiast st.chat_input)
         with st.form("chat_form", clear_on_submit=True):
+            profile_ui = st.selectbox(
+                "Styl odpowiedzi",
+                ["Krótka odpowiedź", "Notatka do nauki", "Odpowiedź egzaminacyjna"],
+                index=0
+            )
+
+            profile_map = {
+                "Krótka odpowiedź": "concise",
+                "Notatka do nauki": "study",
+                "Odpowiedź egzaminacyjna": "exam"
+            }
+            profile = profile_map[profile_ui]
+
             user_q = st.text_input("Zadaj pytanie do PDF...", placeholder="Np. Z czego składa się komputer?")
             submitted = st.form_submit_button("Wyślij")
 
@@ -144,9 +158,15 @@ with tab_chat:
                     retrieval_method=retrieval_method,
                     mmr_lambda=mmr_lambda,
                     fetch_k=fetch_k,
+                    profile=profile,
                 )
 
-            st.session_state.messages.append({"role": "assistant", "content": resp})
+            label = f"🧩 Styl: {profile_ui} | 🔎 Retrieval: {retrieval_method}"
+            st.session_state.messages.append(
+                {"role": "assistant", "content": f"{label}\n\n{resp}"}
+            )
+
+
             st.rerun()
 
         st.divider()
@@ -217,3 +237,19 @@ with tab_analysis:
             st.dataframe(pd.DataFrame(top_terms, columns=["term", "count"]), use_container_width=True)
         else:
             st.write("Brak danych do pokazania.")
+
+        st.divider()
+
+        # Rozkład długości chunków (histogram)
+        st.subheader("Rozkład długości chunków (histogram)")
+
+        chunk_lengths = [
+            len((c.get("text", "") if isinstance(c, dict) else c.text).split())
+            for c in st.session_state.rag.meta
+        ]
+
+        fig, ax = plt.subplots()
+        ax.hist(chunk_lengths, bins=30)
+        ax.set_xlabel("Liczba słów w chunku")
+        ax.set_ylabel("Liczba chunków")
+        st.pyplot(fig)
