@@ -119,38 +119,42 @@ tab_chat, tab_flashcards, tab_analysis = st.tabs(["Chat", "Fiszki", "Analiza"])
 
 # TAB Chat
 
+# TAB Chat
+
 with tab_chat:
     if not st.session_state.ready:
         st.info("Wrzuć PDF(y) w sidebarze i kliknij **Zbuduj indeks**.")
     else:
-        # historia
+        # 1) INPUT NA GÓRZE (zamiast st.chat_input)
+        with st.form("chat_form", clear_on_submit=True):
+            user_q = st.text_input("Zadaj pytanie do PDF...", placeholder="Np. Z czego składa się komputer?")
+            submitted = st.form_submit_button("Wyślij")
+
+        # 2) Obsługa wysłania (generujemy odpowiedź i dopisujemy do historii)
+        if submitted and user_q.strip():
+            st.session_state.messages.append({"role": "user", "content": user_q})
+
+            with st.spinner("Szukam w PDF i składam odpowiedź..."):
+                resp = answer(
+                    question=user_q,
+                    rag=st.session_state.rag,
+                    mode=mode,
+                    top_k=top_k,
+                    llm_model=llm_model,
+                    retrieval_method=retrieval_method,
+                    mmr_lambda=mmr_lambda,
+                    fetch_k=fetch_k,
+                )
+
+            st.session_state.messages.append({"role": "assistant", "content": resp})
+            st.rerun()
+
+        st.divider()
+
+        # 3) HISTORIA POD SPodem, w kolejności (najstarsze u góry, nowe niżej)
         for m in st.session_state.messages:
             with st.chat_message(m["role"]):
                 st.markdown(m["content"])
-
-        user_q = st.chat_input("Zadaj pytanie do PDF...")
-
-        if user_q:
-            st.session_state.messages.append({"role": "user", "content": user_q})
-            with st.chat_message("user"):
-                st.markdown(user_q)
-
-            with st.chat_message("assistant"):
-                with st.spinner("Szukam w PDF i składam odpowiedź..."):
-                    resp = answer(
-                        question=user_q,
-                        rag=st.session_state.rag,
-                        mode=mode,
-                        top_k=top_k,
-                        llm_model=llm_model,
-                        retrieval_method=retrieval_method,
-                        mmr_lambda=mmr_lambda,
-                        fetch_k=fetch_k,
-                    )
-                    st.markdown(resp)
-
-            st.session_state.messages.append({"role": "assistant", "content": resp})
-
 
 # TAB Flashcards
 
