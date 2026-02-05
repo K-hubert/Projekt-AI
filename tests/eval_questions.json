@@ -1,0 +1,14 @@
+[
+  {
+    "id": "q1",
+    "question": "Co to jest RAM?",
+    "expected_keywords": ["RAM", "pamięć", "operacyjna"],
+    "must_cite": true
+  },
+  {
+    "id": "q2",
+    "question": "Z czego składa się komputer?",
+    "expected_keywords": ["CPU", "pamięć", "wejścia-wyjścia"],
+    "must_cite": true
+  }
+]

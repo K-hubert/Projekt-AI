@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from rag.rag_core import RagIndex, answer, generate_flashcards, compute_text_stats
+from rag.evaluator import Evaluator
 
 st.set_page_config(page_title="PDF RAG Chat", layout="wide")
 
@@ -57,13 +58,13 @@ with st.sidebar:
     )
 
     col1, col2 = st.columns(2)
-    build_index = col1.button("Zbuduj indeks", use_container_width=True)
-    reset_all = col2.button("Reset", use_container_width=True)
+    build_index = col1.button("Zbuduj indeks", width='stretch')
+    reset_all = col2.button("Reset", width='stretch')
 
     st.divider()
     st.subheader("Fiszki do nauki")
     n_cards = st.slider("Liczba fiszek", 5, 60, 20)
-    gen_cards = st.button("Generuj fiszki", use_container_width=True)
+    gen_cards = st.button("Generuj fiszki", width='stretch')
 
 
 # Reset
@@ -141,6 +142,12 @@ with tab_chat:
             }
             profile = profile_map[profile_ui]
 
+            prompt_template = st.selectbox(
+                "Szablon promptu",
+                ["Standard", "Ścisły (tylko z kontekstu)", "Nauczyciel (wyjaśnij prosto)"],
+                index=0
+            )
+            use_few_shot_ui = st.checkbox("Few-shot (przykłady w promptcie)", value=True)
             user_q = st.text_input("Zadaj pytanie do PDF...", placeholder="Np. Z czego składa się komputer?")
             submitted = st.form_submit_button("Wyślij")
 
@@ -159,9 +166,15 @@ with tab_chat:
                     mmr_lambda=mmr_lambda,
                     fetch_k=fetch_k,
                     profile=profile,
+                    prompt_template=prompt_template,
+                    use_few_shot=use_few_shot_ui,
                 )
+            evaluator = Evaluator()
+            retrieved = getattr(st.session_state.rag, "last_retrieved", [])
+            eval_res = evaluator.evaluate(resp, retrieved)
 
-            label = f"🧩 Styl: {profile_ui} | 🔎 Retrieval: {retrieval_method}"
+            
+            label = f"⚙️ Styl: {profile_ui} | 🧩 Szablon: {prompt_template} | 🎓 Few-shot: {'TAK' if use_few_shot_ui else 'NIE'} | 🔎 Retrieval: {retrieval_method}"
             st.session_state.messages.append(
                 {"role": "assistant", "content": f"{label}\n\n{resp}"}
             )
@@ -172,7 +185,7 @@ with tab_chat:
         st.divider()
 
         # 3) HISTORIA POD SPodem, w kolejności (najstarsze u góry, nowe niżej)
-        for m in st.session_state.messages:
+        for m in reversed(st.session_state.messages):
             with st.chat_message(m["role"]):
                 st.markdown(m["content"])
 
@@ -204,7 +217,8 @@ with tab_flashcards:
                 data=df.to_csv(index=False).encode("utf-8"),
                 file_name="flashcards.csv",
                 mime="text/csv",
-                use_container_width=True,
+                width="stretch",
+
             )
         else:
             st.warning("Brak fiszek. Kliknij **Generuj fiszki** w sidebarze.")
@@ -234,7 +248,7 @@ with tab_analysis:
         st.subheader("Najczęstsze terminy")
         top_terms = stats.get("top_terms", [])
         if top_terms:
-            st.dataframe(pd.DataFrame(top_terms, columns=["term", "count"]), use_container_width=True)
+            st.dataframe(pd.DataFrame(top_terms, columns=["term", "count"]), width='stretch')
         else:
             st.write("Brak danych do pokazania.")
 

@@ -99,6 +99,7 @@ def answer(
     fetch_k: int = 30,
     use_few_shot: bool = True,
     profile: str = "concise",
+    prompt_template: str = "Standard",
 ) -> str:
 
     retriever = Retriever(rag)
@@ -112,6 +113,8 @@ def answer(
         )
     else:
         retrieved = retriever.similarity(question, top_k=top_k)
+    
+    rag.last_retrieved = retrieved
 
     prompt_builder = PromptBuilder()
 
@@ -121,7 +124,8 @@ def answer(
         cfg=PromptConfig(
             mode=mode,
             use_few_shot=use_few_shot,
-            profile=profile
+            profile=profile,
+            template=prompt_template
         )
     )
 

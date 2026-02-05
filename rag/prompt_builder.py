@@ -46,6 +46,7 @@ class PromptConfig:
     mode: str = "qa"
     use_few_shot: bool = True
     profile: str = "concise"   # concise / study / exam
+    template: str = "Standard"
 
 
 class PromptBuilder:
@@ -79,6 +80,18 @@ class PromptBuilder:
         elif cfg.profile == "exam":
             profile_rules = "- Odpowiedź pełnym formalnym stylem egzaminacyjnym."
 
+        template_rules = ""
+
+        if cfg.template == "Standard":
+            template_rules = ""
+
+        elif cfg.template == "Dokładny":
+            template_rules = "- Odpowiedź powinna być bardzo szczegółowa i rozwinięta."
+
+        elif cfg.template == "Minimalny":
+            template_rules = "- Odpowiedź powinna być maksymalnie skrócona."
+
+
         if cfg.mode == "qa":
             
             return f"""Odpowiedz WYŁĄCZNIE na podstawie kontekstu. Jeśli brak odpowiedzi w kontekście, powiedz: "Nie mam informacji w PDF-ach."
@@ -93,6 +106,7 @@ PYTANIE:
 WYMAGANIA:
 - krótko i konkretnie po polsku
 {profile_rules}
+{template_rules}
 - na końcu "Źródła:" (plik + strona + chunk)
 """
         else:
