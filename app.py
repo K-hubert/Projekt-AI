@@ -8,7 +8,6 @@ from rag.evaluator import Evaluator
 st.set_page_config(page_title="PDF RAG Chat", layout="wide")
 
 st.title("PDF RAG Chat")
-st.caption("Wrzuć PDF(y) → indeksuję → pytasz → odpowiedź ze źródłami + fiszki + analiza.")
 
 
 # Session state
@@ -26,7 +25,6 @@ if "stats" not in st.session_state:
 
 
 # Sidebar
-
 with st.sidebar:
     st.header("Ustawienia")
 
@@ -68,7 +66,6 @@ with st.sidebar:
 
 
 # Reset
-
 if reset_all:
     st.session_state.rag = None
     st.session_state.ready = False
@@ -79,7 +76,6 @@ if reset_all:
 
 
 # Build index
-
 if build_index:
     if not uploaded_files:
         st.warning("Wrzuć przynajmniej jeden PDF.")
@@ -92,15 +88,12 @@ if build_index:
             st.session_state.ready = True
             st.session_state.messages = []
             st.session_state.flashcards = None
-
-            # statystyki liczymy od razu po indeksacji
             st.session_state.stats = compute_text_stats(rag.meta)
 
         st.success("Indeks gotowy.")
 
 
 # Generate flashcards
-
 if gen_cards:
     if not st.session_state.ready:
         st.warning("Najpierw zbuduj indeks.")
@@ -115,19 +108,15 @@ if gen_cards:
         st.success("Fiszki gotowe.")
 
 # Tabs
-
 tab_chat, tab_flashcards, tab_analysis = st.tabs(["Chat", "Fiszki", "Analiza"])
 
 
 # TAB Chat
-
-# TAB Chat
-
 with tab_chat:
     if not st.session_state.ready:
         st.info("Wrzuć PDF(y) w sidebarze i kliknij **Zbuduj indeks**.")
     else:
-        # 1) INPUT NA GÓRZE (zamiast st.chat_input)
+        #INPUT NA GÓRZE
         with st.form("chat_form", clear_on_submit=True):
             profile_ui = st.selectbox(
                 "Styl odpowiedzi",
@@ -151,7 +140,7 @@ with tab_chat:
             user_q = st.text_input("Zadaj pytanie do PDF...", placeholder="Np. Z czego składa się komputer?")
             submitted = st.form_submit_button("Wyślij")
 
-        # 2) Obsługa wysłania (generujemy odpowiedź i dopisujemy do historii)
+        # Obsługa wysłania (generujemy odpowiedź i dopisujemy do historii)
         if submitted and user_q.strip():
             st.session_state.messages.append({"role": "user", "content": user_q})
 
@@ -184,7 +173,7 @@ with tab_chat:
 
         st.divider()
 
-        # 3) HISTORIA POD SPodem, w kolejności (najstarsze u góry, nowe niżej)
+        #Odwrócenie kolejności historii i wyświetlenie
         for m in reversed(st.session_state.messages):
             with st.chat_message(m["role"]):
                 st.markdown(m["content"])

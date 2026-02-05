@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 from dataclasses import dataclass
 from typing import List
-
 from rag.retriever import RetrievedChunk
 
 DEFAULT_LLM_MODEL = "gpt-4o-mini"
@@ -48,11 +46,8 @@ class PromptConfig:
     profile: str = "concise"   # concise / study / exam
     template: str = "Standard"
 
-
+#Składanie promptów do LLM
 class PromptBuilder:
-    """
-    Składa prompt do LLM (QA / Study) + kontekst z retrieved chunków.
-    """
 
     def build_context(self, retrieved: List[RetrievedChunk]) -> str:
         blocks = []

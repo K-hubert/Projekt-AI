@@ -1,11 +1,11 @@
-import fitz  # PyMuPDF
+import fitz  
 from dataclasses import dataclass
 from typing import List, Tuple
 
 @dataclass
 class PDFPage:
-    source: str   # filename
-    page: int     # 1-based
+    source: str   
+    page: int    
     text: str
 
 def extract_pages_from_pdf_bytes(pdf_bytes: bytes, filename: str) -> List[PDFPage]:

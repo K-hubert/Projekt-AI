@@ -28,7 +28,6 @@ def run_eval_set(
             profile=profile,
         )
 
-        # retrieved masz w rag.last_retrieved (albo dodasz)
         retrieved = rag.last_retrieved
 
         r = evaluator.evaluate_with_keywords(

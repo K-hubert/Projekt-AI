@@ -12,14 +12,10 @@ if TYPE_CHECKING:
 @dataclass
 class RetrievedChunk:
     meta: Dict[str, Any]
-    score: float  # dla L2: mniejszy = lepszy
+    score: float  
 
 
 class Retriever:
-    """
-    Odpowiada wyłącznie za retrieval (similarity / MMR).
-    Nie buduje indeksu i nie wywołuje LLM.
-    """
 
     def __init__(self, rag_index: "RagIndex"):
         self.rag = rag_index
@@ -51,7 +47,7 @@ class Retriever:
         fetch_k: int = 30,
         lambda_: float = 0.6,
     ) -> List[RetrievedChunk]:
-        # fallback jeśli nie mamy wektorów
+        
         if self.rag.index is None or self.rag.vectors is None or not self.rag.meta:
             return self.similarity(query, top_k=top_k)
 

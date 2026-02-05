@@ -22,11 +22,8 @@ load_dotenv()
 EMBED_MODEL = "text-embedding-3-small"
 DEFAULT_LLM_MODEL = "gpt-4o-mini"
 
-
+#Index dokumentów
 class RagIndex:
-    """
-    Index dokumentów (PDF -> tekst -> chunki -> embedding -> FAISS).
-    """
 
     def __init__(self):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -84,10 +81,7 @@ class RagIndex:
         self.vectors = vectors
 
 
-# =====================
 # ANSWER
-# =====================
-
 def answer(
     question: str,
     rag: RagIndex,
@@ -143,15 +137,13 @@ def answer(
 
     out = resp.choices[0].message.content
 
-    # evaluator (na razie tylko do testów)
+    # evaluator 
     Evaluator().evaluate(out, retrieved)
 
     return out
 
 
-# =====================
 # FLASHCARDS
-# =====================
 
 def generate_flashcards(
     rag: RagIndex,
@@ -202,9 +194,8 @@ KONTEKST:
         return json.loads(raw[start:end + 1])
 
 
-# =====================
+
 # ANALIZA
-# =====================
 
 def compute_text_stats(meta: List[Dict[str, Any]]) -> Dict[str, Any]:
 
