@@ -1,5 +1,25 @@
-id,question,has_sources,used_context,keywords_hit,keywords_total,notes,retrieval_method
-q1,Co to jest RAM?,True,True,3,3,,similarity
-q2,Z czego składa się komputer?,True,True,2,3,,similarity
-q1,Co to jest RAM?,True,True,3,3,,mmr
-q2,Z czego składa się komputer?,True,True,2,3,,mmr
+id,question,retrieval_method,has_sources,used_context,keywords_hit,keywords_total,notes
+q1,Co to jest RAM i do czego służy w komputerze?,similarity,False,True,0,3,Brak sekcji źródeł w odpowiedzi.
+q2,Na czym polega architektura von Neumanna i jakie elementy obejmuje?,similarity,True,True,2,3,
+q3,Z czego składa się komputer (wymień podstawowe komponenty)?,similarity,True,True,2,3,
+q4,Na czym polega BFS i do czego używa się przeszukiwania wszerz w grafach?,similarity,True,True,2,3,
+q5,Na czym polega DFS i czym różni się od BFS?,similarity,True,True,3,3,
+q6,Opisz algorytm Dijkstry i kiedy można go stosować.,similarity,True,True,0,3,
+q7,Czym różni się protokół routingu typu distance-vector od link-state?,similarity,True,True,1,3,
+q8,Do czego służy OSPF i na jakiej idei opiera się jego działanie?,similarity,True,True,1,3,
+q9,Czym jest perceptron i jaką rolę pełni funkcja aktywacji w sieci neuronowej?,similarity,True,True,3,3,
+q10,Wymień przykłady zastosowań technologii wspierających osoby z demencją.,similarity,True,True,2,3,
+q11_fake,"Wyjaśnij, jak działa konsensus Proof-of-Stake w blockchainie i jakie ma zalety.",similarity,False,True,0,3,Brak sekcji źródeł w odpowiedzi.
+q12_fake,Co to jest wzorzec Operator w Kubernetes i do czego się go używa?,similarity,False,True,0,3,Brak sekcji źródeł w odpowiedzi.
+q1,Co to jest RAM i do czego służy w komputerze?,mmr,True,True,3,3,
+q2,Na czym polega architektura von Neumanna i jakie elementy obejmuje?,mmr,True,True,3,3,
+q3,Z czego składa się komputer (wymień podstawowe komponenty)?,mmr,True,True,2,3,
+q4,Na czym polega BFS i do czego używa się przeszukiwania wszerz w grafach?,mmr,True,True,2,3,
+q5,Na czym polega DFS i czym różni się od BFS?,mmr,True,True,3,3,
+q6,Opisz algorytm Dijkstry i kiedy można go stosować.,mmr,True,True,0,3,
+q7,Czym różni się protokół routingu typu distance-vector od link-state?,mmr,True,True,2,3,
+q8,Do czego służy OSPF i na jakiej idei opiera się jego działanie?,mmr,True,True,1,3,
+q9,Czym jest perceptron i jaką rolę pełni funkcja aktywacji w sieci neuronowej?,mmr,True,True,3,3,
+q10,Wymień przykłady zastosowań technologii wspierających osoby z demencją.,mmr,True,True,2,3,
+q11_fake,"Wyjaśnij, jak działa konsensus Proof-of-Stake w blockchainie i jakie ma zalety.",mmr,False,True,0,3,Brak sekcji źródeł w odpowiedzi.
+q12_fake,Co to jest wzorzec Operator w Kubernetes i do czego się go używa?,mmr,False,True,0,3,Brak sekcji źródeł w odpowiedzi.

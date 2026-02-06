@@ -1,14 +1,74 @@
 [
   {
     "id": "q1",
-    "question": "Co to jest RAM?",
+    "question": "Co to jest RAM i do czego służy w komputerze?",
     "expected_keywords": ["RAM", "pamięć", "operacyjna"],
     "must_cite": true
   },
   {
     "id": "q2",
-    "question": "Z czego składa się komputer?",
+    "question": "Na czym polega architektura von Neumanna i jakie elementy obejmuje?",
+    "expected_keywords": ["von Neumanna", "CPU", "pamięć"],
+    "must_cite": true
+  },
+  {
+    "id": "q3",
+    "question": "Z czego składa się komputer (wymień podstawowe komponenty)?",
     "expected_keywords": ["CPU", "pamięć", "wejścia-wyjścia"],
+    "must_cite": true
+  },
+  {
+    "id": "q4",
+    "question": "Na czym polega BFS i do czego używa się przeszukiwania wszerz w grafach?",
+    "expected_keywords": ["BFS", "kolejka", "graf"],
+    "must_cite": true
+  },
+  {
+    "id": "q5",
+    "question": "Na czym polega DFS i czym różni się od BFS?",
+    "expected_keywords": ["DFS", "stos", "BFS"],
+    "must_cite": true
+  },
+  {
+    "id": "q6",
+    "question": "Opisz algorytm Dijkstry i kiedy można go stosować.",
+    "expected_keywords": ["Dijkstra", "najkrótsza", "ścieżka"],
+    "must_cite": true
+  },
+  {
+    "id": "q7",
+    "question": "Czym różni się protokół routingu typu distance-vector od link-state?",
+    "expected_keywords": ["distance-vector", "link-state", "metryka"],
+    "must_cite": true
+  },
+  {
+    "id": "q8",
+    "question": "Do czego służy OSPF i na jakiej idei opiera się jego działanie?",
+    "expected_keywords": ["OSPF", "link-state", "LSA"],
+    "must_cite": true
+  },
+  {
+    "id": "q9",
+    "question": "Czym jest perceptron i jaką rolę pełni funkcja aktywacji w sieci neuronowej?",
+    "expected_keywords": ["perceptron", "funkcja", "aktywacji"],
+    "must_cite": true
+  },
+  {
+    "id": "q10",
+    "question": "Wymień przykłady zastosowań technologii wspierających osoby z demencją.",
+    "expected_keywords": ["demenc", "technolog", "opieka"],
+    "must_cite": true
+  },
+  {
+    "id": "q11_fake",
+    "question": "Wyjaśnij, jak działa konsensus Proof-of-Stake w blockchainie i jakie ma zalety.",
+    "expected_keywords": ["Proof-of-Stake", "konsensus", "walidator"],
+    "must_cite": true
+  },
+  {
+    "id": "q12_fake",
+    "question": "Co to jest wzorzec Operator w Kubernetes i do czego się go używa?",
+    "expected_keywords": ["Kubernetes", "Operator", "CRD"],
     "must_cite": true
   }
 ]
