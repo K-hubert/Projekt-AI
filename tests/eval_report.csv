@@ -1,3 +1,5 @@
 id,question,has_sources,used_context,keywords_hit,keywords_total,notes,retrieval_method
+q1,Co to jest RAM?,True,True,3,3,,similarity
 q2,Z czego składa się komputer?,True,True,2,3,,similarity
+q1,Co to jest RAM?,True,True,3,3,,mmr
 q2,Z czego składa się komputer?,True,True,2,3,,mmr

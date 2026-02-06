@@ -14,12 +14,6 @@ class EvalResult:
 
 
 class Evaluator:
-    """
-    Minimalny evaluator pod zaliczenie:
-    - sprawdza czy odpowiedź ma sekcję Źródła
-    - sprawdza czy odpowiedź nie jest pusta
-    - (opcjonalnie) można rozszerzyć o LLM-as-judge / faithfulness
-    """
 
     def evaluate(self, answer_text: str, retrieved: List[RetrievedChunk]) -> EvalResult:
         text = (answer_text or "").strip()
@@ -34,3 +28,19 @@ class Evaluator:
             notes = "Brak sekcji źródeł w odpowiedzi."
 
         return EvalResult(has_sources=has_sources, used_context=used_context, notes=notes)
+    
+    def evaluate_with_keywords(
+        self,
+        answer_text: str,
+        retrieved: List[RetrievedChunk],
+        expected_keywords: List[str],
+    ) -> EvalResult:
+        base = self.evaluate(answer_text, retrieved)
+
+        text = (answer_text or "").lower()
+        hits = [kw for kw in expected_keywords if (kw or "").lower() in text]
+
+        if expected_keywords:
+            base.notes = (base.notes + " | " if base.notes else "") + f"keywords: {len(hits)}/{len(expected_keywords)}"
+
+        return base

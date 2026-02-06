@@ -56,13 +56,13 @@ with st.sidebar:
     )
 
     col1, col2 = st.columns(2)
-    build_index = col1.button("Zbuduj indeks", width='stretch')
-    reset_all = col2.button("Reset", width='stretch')
+    build_index = col1.button("Zbuduj indeks", use_container_width=True)
+    reset_all = col2.button("Reset", use_container_width=True)
 
     st.divider()
     st.subheader("Fiszki do nauki")
     n_cards = st.slider("Liczba fiszek", 5, 60, 20)
-    gen_cards = st.button("Generuj fiszki", width='stretch')
+    gen_cards = st.button("Generuj fiszki", use_container_width=True)
 
 
 # Reset
@@ -131,11 +131,20 @@ with tab_chat:
             }
             profile = profile_map[profile_ui]
 
-            prompt_template = st.selectbox(
+            # UI pokazuje Twoje opisy, ale wartości są zgodne z PromptBuilder:
+            # "Standard" / "Dokładny" / "Minimalny"
+            prompt_template_key = st.selectbox(
                 "Szablon promptu",
-                ["Standard", "Ścisły (tylko z kontekstu)", "Nauczyciel (wyjaśnij prosto)"],
-                index=0
+                ["Standard", "Dokładny", "Minimalny"],
+                index=0,
+                format_func=lambda x: (
+                    "Standard" if x == "Standard"
+                    else "Ścisły (tylko z kontekstu)" if x == "Minimalny"
+                    else "Nauczyciel (wyjaśnij prosto)"  # x == "Dokładny"
+                )
             )
+            prompt_template = prompt_template_key
+
             use_few_shot_ui = st.checkbox("Few-shot (przykłady w promptcie)", value=True)
             user_q = st.text_input("Zadaj pytanie do PDF...", placeholder="Np. Z czego składa się komputer?")
             submitted = st.form_submit_button("Wyślij")
@@ -206,7 +215,7 @@ with tab_flashcards:
                 data=df.to_csv(index=False).encode("utf-8"),
                 file_name="flashcards.csv",
                 mime="text/csv",
-                width="stretch",
+                use_container_width=True,
 
             )
         else:
@@ -237,7 +246,7 @@ with tab_analysis:
         st.subheader("Najczęstsze terminy")
         top_terms = stats.get("top_terms", [])
         if top_terms:
-            st.dataframe(pd.DataFrame(top_terms, columns=["term", "count"]), width='stretch')
+            st.dataframe(pd.DataFrame(top_terms, columns=["term", "count"]), use_container_width=True)
         else:
             st.write("Brak danych do pokazania.")
 
