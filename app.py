@@ -131,7 +131,7 @@ with tab_chat:
             }
             profile = profile_map[profile_ui]
 
-            # UI pokazuje Twoje opisy, ale wartości są zgodne z PromptBuilder:
+
             # "Standard" / "Dokładny" / "Minimalny"
             prompt_template_key = st.selectbox(
                 "Szablon promptu",

@@ -9,17 +9,17 @@ from rag.rag_core import RagIndex, answer
 
 
 def main() -> None:
-    # Ścieżki względem folderu tests/
+    # Ścieżki
     base_dir = Path(__file__).resolve().parent
     questions_path = base_dir / "eval_questions.json"
 
-    # 1) Wczytaj pytania testowe
+    # Wczytanie pytań testowych
     with open(questions_path, encoding="utf-8") as f:
         questions = json.load(f)
 
-    # 2) Zbuduj indeks z PDF-ów z dysku (tak jak w app.py, tylko bez uploadu)
+    #Budowanie indeksów z PDF (tak jak w app.py, tylko bez uploadu)
     project_root = base_dir.parent
-    pdf_dir = project_root / "data" / "pdfs"  # <- TU mają leżeć PDF-y do testów
+    pdf_dir = project_root / "data" / "pdfs"  
 
     pdf_paths = sorted(pdf_dir.glob("*.pdf"))
     if not pdf_paths:
@@ -33,7 +33,7 @@ def main() -> None:
     evaluator = Evaluator()
     results = []
 
-    # 3) Odpal testy
+    # Run testów
     methods = ["similarity", "mmr"]
 
     for method in methods:
@@ -70,7 +70,7 @@ def main() -> None:
                 }
             )
 
-    # 4) Raport w konsoli
+    #Raport w konsoli
     print("\n=== WYNIKI EWALUACJI ===")
     for r in results:
         print(
@@ -81,7 +81,7 @@ def main() -> None:
             f"  - notes: {r['notes']}\n"
         )
 
-    # 5) Zapis do CSV
+    #Zapis do CSV
     out_path = base_dir / "eval_report.csv"
     with open(out_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=results[0].keys())

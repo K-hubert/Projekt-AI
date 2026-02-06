@@ -196,7 +196,6 @@ KONTEKST:
 
 
 # ANALIZA
-
 def compute_text_stats(meta: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     texts = [m.get("text", "") or "" for m in meta]

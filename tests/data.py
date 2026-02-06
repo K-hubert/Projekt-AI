@@ -1,13 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# wczytaj CSV
+# wczytanie CSV
 df = pd.read_csv("tests/eval_report.csv")
 
-# policz trafność
+# Liczenie trafności
 df["accuracy"] = df["keywords_hit"] / df["keywords_total"]
 
-# średnia trafność per metoda
+# średnia trafność na metode
 agg = df.groupby("retrieval_method")["accuracy"].mean()
 
 # wykres
